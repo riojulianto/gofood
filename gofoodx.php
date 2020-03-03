@@ -24,14 +24,14 @@ $headers[] = 'X-Location: -6.405821,106.064193';
 		$nama = nama();
 		$email = strtolower(str_replace(" ", "", $nama) . mt_rand(100,999) . "@gmail.com");
 		$data1 = '{"name":"' . $nama . '","email":"' . $email . '","phone":"+' . $number . '","signed_up_country":"ID"}';
-		$reg = curl('https://api.gojekapi.com/customer_referrals/v1/campaign/enrolment', $data1, $headers);
+		$reg = curl('https://api.gojekapi.com/v5/customers', $data1, $headers);
 		$regs = json_decode($reg[0]);
 		// Verif OTP
 		if($regs->success == true) {
 			echo "[+] OTP: ";
 			$otp = trim(fgets(STDIN));
 			$data2 = '{"client_name":"gojek:cons:android","data":{"otp":"' . $otp . '","otp_token":"' . $regs->data->otp_token . '"},"client_secret":"' . $secret . '"}';
-			$verif = curl('https://api.gojekapi.com/customer_referrals/v1/campaign/enrolment', $data2, $headers);
+			$verif = curl('https://api.gojekapi.com/v5/customers', $data2, $headers);
 			$verifs = json_decode($verif[0]);
 			if($verifs->success == true) {
 				// Claim Voucher
