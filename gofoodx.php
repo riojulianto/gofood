@@ -24,14 +24,14 @@ $headers[] = 'X-Location: -6.405821,106.064193';
 		$nama = nama();
 		$email = strtolower(str_replace(" ", "", $nama) . mt_rand(100,999) . "@gmail.com");
 		$data1 = '{"name":"' . $nama . '","email":"' . $email . '","phone":"+' . $number . '","signed_up_country":"ID"}';
-		$reg = curl('https://api.gojekapi.com/v5/customers', $data1, $headers);
+		$reg = curl('https://api.gojekapi.com/customer_referrals/v1/campaign/enrolment', $data1, $headers);
 		$regs = json_decode($reg[0]);
 		// Verif OTP
 		if($regs->success == true) {
 			echo "[+] OTP: ";
 			$otp = trim(fgets(STDIN));
 			$data2 = '{"client_name":"gojek:cons:android","data":{"otp":"' . $otp . '","otp_token":"' . $regs->data->otp_token . '"},"client_secret":"' . $secret . '"}';
-			$verif = curl('https://api.gojekapi.com/v5/customers/phone/verify', $data2, $headers);
+			$verif = curl('https://api.gojekapi.com/customer_referrals/v1/campaign/enrolment', $data2, $headers);
 			$verifs = json_decode($verif[0]);
 			if($verifs->success == true) {
 				// Claim Voucher
@@ -42,19 +42,22 @@ $headers[] = 'X-Location: -6.405821,106.064193';
     $fwrite1 = fwrite($fopen1, "TOKEN => ".$token." \n NOMOR => ".$number." \n");
     fclose($fopen1);
     echo "[+] File Token saved in ".$live." \n";
-    echo "[+]Process Redeem GOFOODSANTAI19\n";
+    echo "[+]Process Redeem VOC 25\n";
                 sleep(5);
-				$data3 = '{"promo_code":"G-75SR565"}';
-				$claim = curl('https://api.gojekapi.com/go-promotions/v1/promotions/enrollments', $data3, $headers);
+				echo "[+] Sedang Me-Redeem Promo Referral\n";
+				$data3 = '{"referral_code":"G-75SR565"}';
+				$claim = curl('https://api.gojekapi.com/customer_referrals/v1/campaign/enrolment', $data3, $headers);
 				$claims = json_decode($claim[0]);
 					echo $claims->data->message;
 					echo "\n";
-					echo "Tunggu 10 Detik!\n";
+					sleep(5);
+					echo $claims1->data->message;
+					
 					sleep(10);
 				
 					echo "[+]Process Redeem skip \n";
 						$data4 = '{"promo_code":"skip"}';
-				$claim1 = curl('https://api.gojekapi.com/go-promotions/v1/promotions/enrollments', $data4, $headers);
+				$claim1 = curl('https://api.gojekapi.com/customer_referrals/v1/campaign/enrolment', $data4, $headers);
 				$claims1 = json_decode($claim1[0]);
 					echo $claims1->data->message;
 					}
